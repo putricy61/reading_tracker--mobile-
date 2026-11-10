@@ -1,0 +1,24 @@
+name: reading_tracker
+description: "Reading Tracker - Strava for Reading. Aplikasi pencatat sesi membaca buku fisik dan ebook."
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.5.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  # [TAHAP 1] BARU: provider untuk MultiProvider + context.read() (syarat dosen no. 7)
+  provider: ^6.1.5+1
+  image_picker: ^1.2.4
+  gal: ^2.3.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
