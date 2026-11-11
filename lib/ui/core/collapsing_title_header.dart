@@ -13,9 +13,13 @@ class CollapsingTitleHeader extends StatelessWidget {
     super.key,
     required this.title,
     this.expandedHeight = 112,
+    this.trailing, // [TAHAP 2 - BARU] widget aksi di kanan header
   });
 
   final String title;
+
+  /// [TAHAP 2 - BARU] Mis. ikon profil di Beranda.
+  final Widget? trailing;
 
   /// Tinggi header saat belum di-scroll (di luar tinggi status bar).
   final double expandedHeight;
@@ -85,6 +89,14 @@ class CollapsingTitleHeader extends StatelessWidget {
                   ),
                 ),
               ),
+              // [TAHAP 2 - BARU] aksi di kanan, sejajar dengan judul
+              if (trailing != null)
+                Positioned(
+                  right: 8,
+                  bottom: lerpDouble(0, 6, t)!,
+                  height: kToolbarHeight,
+                  child: Center(child: trailing),
+                ),
             ],
           );
         },
