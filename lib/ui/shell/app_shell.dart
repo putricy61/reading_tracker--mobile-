@@ -1,8 +1,12 @@
 // [TAHAP 1] BARU: cangkang aplikasi = satu NavigationBar berisi 4 halaman (syarat dosen no. 4).
+// [TAHAP 3 - UBAH] Ikon Library kini punya Badge jumlah ebook "Sedang Dibaca" yang
+// ikut berubah saat checklist dicentang (syarat dosen no. 5).
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../data/repositories/library_book_repository.dart';
 import '../core/app_colors.dart';
 import '../core/glass_background.dart';
 import '../home/home_screen.dart';
@@ -38,6 +42,8 @@ class _AppShellState extends State<AppShell> {
         bottomNavigationBar: _GlassNavBar(
           selectedIndex: _index,
           onSelected: (i) => setState(() => _index = i),
+          // [TAHAP 3 - BARU] repository dikirim agar badge bisa diamati
+          libraryRepository: context.read<LibraryBookRepository>(),
         ),
       ),
     );
@@ -45,10 +51,15 @@ class _AppShellState extends State<AppShell> {
 }
 
 class _GlassNavBar extends StatelessWidget {
-  const _GlassNavBar({required this.selectedIndex, required this.onSelected});
+  const _GlassNavBar({
+    required this.selectedIndex,
+    required this.onSelected,
+    required this.libraryRepository,
+  });
 
   final int selectedIndex;
   final ValueChanged<int> onSelected;
+  final LibraryBookRepository libraryRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -67,36 +78,51 @@ class _GlassNavBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(32),
                 border: Border.all(color: AppColors.glassBorder),
               ),
-              child: NavigationBar(
-                selectedIndex: selectedIndex,
-                onDestinationSelected: onSelected,
-                height: 68,
-                labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-                destinations: const [
-                  NavigationDestination(
-                    icon: Icon(Icons.home_outlined),
-                    selectedIcon: Icon(Icons.home_rounded),
-                    label: 'Beranda',
-                  ),
-                  NavigationDestination(
-                    icon: Icon(Icons.search_rounded),
-                    selectedIcon: Icon(Icons.search_rounded),
-                    label: 'Search',
-                  ),
-                  // [TAHAP 1] Ikon Library polos.
-                  // [TAHAP 3] AKAN DIUBAH: bungkus dengan Badge yang jumlahnya
-                  //           dari LibraryBookRepository (item Sedang Dibaca).
-                  NavigationDestination(
-                    icon: Icon(Icons.local_library_outlined),
-                    selectedIcon: Icon(Icons.local_library_rounded),
-                    label: 'Library',
-                  ),
-                  NavigationDestination(
-                    icon: Icon(Icons.fiber_manual_record_outlined),
-                    selectedIcon: Icon(Icons.fiber_manual_record_rounded),
-                    label: 'Rekam',
-                  ),
-                ],
+              // [TAHAP 3 - BARU] ListenableBuilder: bar dibangun ulang tiap Library berubah
+              child: ListenableBuilder(
+                listenable: libraryRepository,
+                builder: (context, _) {
+                  final count = libraryRepository.inProgressCount;
+                  return NavigationBar(
+                    selectedIndex: selectedIndex,
+                    onDestinationSelected: onSelected,
+                    height: 68,
+                    labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+                    destinations: [
+                      const NavigationDestination(
+                        icon: Icon(Icons.home_outlined),
+                        selectedIcon: Icon(Icons.home_rounded),
+                        label: 'Beranda',
+                      ),
+                      const NavigationDestination(
+                        icon: Icon(Icons.search_rounded),
+                        selectedIcon: Icon(Icons.search_rounded),
+                        label: 'Search',
+                      ),
+                      // [TAHAP 3 - UBAH] ikon Library dibungkus Badge
+                      NavigationDestination(
+                        icon: Badge(
+                          isLabelVisible: count > 0,
+                          label: Text('$count'),
+                          backgroundColor: AppColors.accent,
+                          child: const Icon(Icons.local_library_outlined),
+                        ),
+                        selectedIcon: Badge(
+                          isLabelVisible: count > 0,
+                          label: Text('$count'),
+                          backgroundColor: AppColors.accent,
+                          child: const Icon(Icons.local_library_rounded),
+                        ),
+                        label: 'Library',
+                      ),
+                      const NavigationDestination(
+                        icon: Icon(Icons.fiber_manual_record_outlined),
+                        selectedIcon: Icon(Icons.fiber_manual_record_rounded),
+                        label: 'Rekam',
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ),
