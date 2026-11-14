@@ -21,7 +21,8 @@ List<SingleChildWidget> buildProviders() {
     ChangeNotifierProvider<LibraryBookRepository>(
       create: (context) => LibraryBookRepository(service: context.read()),
     ),
-    Provider<ReadingSessionRepository>(
+    // [TAHAP 4 - UBAH] Provider -> ChangeNotifierProvider (repository kini ChangeNotifier)
+    ChangeNotifierProvider<ReadingSessionRepository>(
       create: (context) => ReadingSessionRepository(service: context.read()),
     ),
   ];

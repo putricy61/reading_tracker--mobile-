@@ -18,6 +18,8 @@ class HomeViewModel extends ChangeNotifier {
         _sessions = sessionRepository {
     // Repository data aksi berubah (tambah/checklist) -> Beranda ikut diperbarui.
     _library.addListener(notifyListeners);
+    // [TAHAP 4 - BARU] Sesi baru disimpan -> kalender Beranda ikut diperbarui.
+    _sessions.addListener(notifyListeners);
   }
 
   final BookInfoRepository _books;
@@ -58,6 +60,7 @@ class HomeViewModel extends ChangeNotifier {
   @override
   void dispose() {
     _library.removeListener(notifyListeners);
+    _sessions.removeListener(notifyListeners); // [TAHAP 4 - BARU]
     super.dispose();
   }
 }

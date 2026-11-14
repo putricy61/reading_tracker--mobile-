@@ -50,6 +50,15 @@ class LibraryBookRepository extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// [TAHAP 4 - BARU] Memajukan halaman terakhir setelah merekam sesi ebook.
+  void updateLastPage(String id, int page) {
+    _items = [
+      for (final b in _items)
+        b.id == id ? b.copyWith(lastPage: page > b.lastPage ? page : b.lastPage) : b,
+    ];
+    notifyListeners();
+  }
+
   /// Dipakai checklist di Tahap 3. Memakai copyWith() lalu memberi tahu pendengar.
   void setCompleted(String id, bool value) {
     _items = [

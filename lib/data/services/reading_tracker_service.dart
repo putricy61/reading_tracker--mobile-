@@ -70,6 +70,11 @@ class ReadingTrackerService {
     ];
   }
 
+  // [TAHAP 4 - BARU] Simulasi menyimpan sesi baru ke "server".
+  Future<void> saveSession(Map<String, dynamic> json) async {
+    await Future.delayed(const Duration(milliseconds: 400));
+  }
+
   static const List<Map<String, dynamic>> _books = [
     {
       'id': 'b1', 'title': 'Laskar Pelangi', 'author': 'Andrea Hirata',

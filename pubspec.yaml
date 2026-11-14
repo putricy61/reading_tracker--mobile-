@@ -11,9 +11,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
   # [TAHAP 1] BARU: provider untuk MultiProvider + context.read() (syarat dosen no. 7)
-  provider: ^6.1.5+1
-  image_picker: ^1.2.4
-  gal: ^2.3.3
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:
