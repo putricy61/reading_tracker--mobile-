@@ -12,6 +12,10 @@ dependencies:
   cupertino_icons: ^1.0.8
   # [TAHAP 1] BARU: provider untuk MultiProvider + context.read() (syarat dosen no. 7)
   provider: ^6.1.2
+  # [TAHAP 5] BARU: simpan gambar ke galeri
+  gal: ^2.3.1
+  # [TAHAP 5] BARU: pilih foto dari galeri untuk latar laporan
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:

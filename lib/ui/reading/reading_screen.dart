@@ -12,6 +12,7 @@ import '../../domain/models/reading_session.dart';
 import '../core/app_colors.dart';
 import '../core/collapsing_title_header.dart';
 import '../core/glass_card.dart';
+import 'reading_report_screen.dart'; // [TAHAP 5 - BARU]
 import 'reading_view_model.dart';
 
 class ReadingScreen extends StatefulWidget {
@@ -87,9 +88,9 @@ class _ReadingScreenState extends State<ReadingScreen> {
       c.clear();
     }
     setState(() {});
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Sesi buku fisik tersimpan')),
-    );
+    // [TAHAP 5 - UBAH] Setelah tersimpan, layar laporan visualisasi langsung terbuka
+    // (sebelumnya hanya snackbar).
+    ReadingReportScreen.open(context, _vm.sessions.first);
   }
 
   Future<void> _saveEbook() async {
@@ -192,7 +193,12 @@ class _ReadingScreenState extends State<ReadingScreen> {
         )
       else
         for (final s in _vm.sessions) ...[
-          _SessionTile(session: s),
+          // [TAHAP 5 - UBAH] Sesi buku fisik bisa diketuk untuk melihat visualisasinya.
+          // [TAHAP 6] AKAN DIUBAH: sesi ebook juga (jejak gestur).
+          _SessionTile(
+            session: s,
+            onTap: s.isPhysical ? () => ReadingReportScreen.open(context, s) : null,
+          ),
           const SizedBox(height: 10),
         ],
     ];
@@ -371,15 +377,17 @@ class _ReadingScreenState extends State<ReadingScreen> {
 }
 
 class _SessionTile extends StatelessWidget {
-  const _SessionTile({required this.session});
+  const _SessionTile({required this.session, this.onTap}); // [TAHAP 5 - UBAH] + onTap
 
   final ReadingSession session;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final percent = session.percentOfBook;
     final d = session.date;
     return GlassCard(
+      onTap: onTap, // [TAHAP 5 - BARU]
       padding: const EdgeInsets.all(14),
       child: Row(
         children: [
