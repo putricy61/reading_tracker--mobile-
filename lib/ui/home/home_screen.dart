@@ -102,6 +102,27 @@ class _HomeScreenState extends State<HomeScreen> {
       const SizedBox(height: 24),
       const _SectionTitle('Rekomendasi ebook'),
       const SizedBox(height: 12),
+      // [TAHAP 4B - BARU] Pilih kategori; daftar rekomendasi di bawah mengikuti pilihan ini.
+      SizedBox(
+        width: double.infinity,
+        child: SegmentedButton<String>(
+          showSelectedIcon: false,
+          segments: [
+            for (final g in HomeViewModel.genres)
+              ButtonSegment<String>(value: g, label: Text(g)),
+          ],
+          selected: {_vm.selectedGenre},
+          onSelectionChanged: (s) => _vm.setGenre(s.first),
+          style: SegmentedButton.styleFrom(
+            backgroundColor: AppColors.glassFill,
+            foregroundColor: AppColors.textMuted,
+            selectedBackgroundColor: AppColors.accent.withValues(alpha: 0.16),
+            selectedForegroundColor: AppColors.accent,
+            side: const BorderSide(color: AppColors.glassBorder),
+          ),
+        ),
+      ),
+      const SizedBox(height: 14),
       SizedBox(
         height: 215,
         child: ListView.separated(

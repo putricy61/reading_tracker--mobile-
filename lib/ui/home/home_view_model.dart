@@ -33,7 +33,21 @@ class HomeViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
 
-  List<BookInfo> get recommendations => _books.cached.take(6).toList();
+  // [TAHAP 4B - UBAH] Rekomendasi kini mengikuti KATEGORI TERPILIH (syarat dosen no. 4:
+  // Beranda = data utama untuk kategori terpilih + data aksi yang belum selesai).
+  // Sebelumnya hanya 6 buku pertama katalog.
+  static const List<String> genres = ['Fiksi', 'Nonfiksi', 'Pendidikan'];
+
+  String _genre = genres.first; // [TAHAP 4B - BARU] kategori yang sedang dipilih
+  String get selectedGenre => _genre;
+
+  List<BookInfo> get recommendations => _books.search(genre: _genre);
+
+  /// [TAHAP 4B - BARU] Dipanggil SegmentedButton di Beranda.
+  void setGenre(String value) {
+    _genre = value;
+    notifyListeners();
+  }
   List<LibraryBook> get inProgress => _library.inProgress;
 
   int minutesOn(DateTime day) => _sessions.minutesOn(day);
